@@ -1,0 +1,217 @@
+\documentclass{article}
+
+\usepackage[final]{nips_2018}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{float}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs}
+
+\usepackage{color}
+
+\bibliographystyle{plainnat}
+\setlength{\parskip}{0pt}
+
+\def\defeq{\dot=}
+
+\title{Analyzing the Role of Temporal Differencing in Deep Reinforcement Learning}
+
+\author{
+  Alexandre Beaulne \\
+  \texttt{alex@mgnr.io} \\
+  ID 20087309
+  \And
+  Amina Madzhun \\
+  \texttt{amina.madzhun@umontreal.ca} \\
+  ID 20052277
+}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+	The objective of our project was to reproduce and compare results 
+    using different Deep Reinforcement Learning algorithms considered 
+    by \citet{amiranashvili2018analyzing}. Since a huge amount of work is 
+    done by the authors, we decided to focus on Atari
+    video games.
+    
+    The choice of the paper for the course project is explained 
+    by the wide range of applicability of Deep Learning
+    including the use of deep neural networks architectures
+    to solve more challenging problems as in deep RL 
+    being at the junction between two machine learning approaches.
+    
+\subsection*{Background}
+	The key idea of Reinforcement Learning (RL) is the learning
+    from interaction with an environment through observations,
+    actions and rewards. \\
+    Consider standard RL problem over discrete time steps
+    involving an episodic setup (starting an episode at $t=0$ and finishing it at
+    terminal time step $t=T$).
+    Let an agent be in a stochastic environment 
+    with its current state $s_t$ at time step $t$.
+    The agent can perform
+    an action $a_t$ from a discrete set of actions.
+    This action leads the environment to a new state $s_{t + 1}$, 
+    and gives a reward $r_t$ to the agent or can finish the episode. \\
+    The goal of the agent is to learn a policy $\pi(a_t|s_t)$
+    to obtain the maximum expected return over time which is
+    the total amount
+    of reward that it can get from the current time step 
+    to the end of the episode,
+    with future rewards being reduced by discount factor $\gamma$ 
+    for each time step. \\
+    For a given policy $\pi$ the value function and the action-value function
+    are defined as:
+	\begin{eqnarray*}
+    	V^\pi(s_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t], &
+        Q^\pi(s_t, a_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t, a_t] 
+	\end{eqnarray*}
+    where $\hat{R}_t$ is cumulated discounted reward 
+    $R^\gamma_t = \sum_{i=t}^T \gamma^{i-t} r_i$ \\
+    or a truncated sum $R^\tau_t = \sum_{i=t}^{t+\tau} r_i$ 
+    ($\tau$ in this case is fixed number of steps - horizon)
+    \\
+    Corresponding optimal functions are
+    \begin{eqnarray*}
+    	V^*(s_t) \defeq \max_{\pi}V^\pi(s_t), &
+        Q^*(s_t, a_t) \defeq \max_{\pi} Q^\pi(s_t, a_t) 
+	\end{eqnarray*}
+    \textcolor{red}{short TD MC theory, Q-learning, mention DQN ??} 
+    
+    
+\section{Paper Summary}
+% Give a summary of the work, in your own words
+	The authors want to investigate the role of Temporal Differencing (TD) 
+    in modern deep Reinforcement Learning and observe the use of
+    different techniques in controlled comparable experiments to evaluate the 
+    advantages of using one approach versus another.
+    They reproduce classic results as well as use 
+    complex (3D) environments to test for tasks requiring perception,
+    navigation and control, while separating influencing factors. 
+    They discover that Monte Carlo estimation 
+    (MC) can be feasible alternative and can be even competitive to TD, 
+    in some cases better
+    in perception and control of visually complex 3D environments 
+    dealing with reward sparsity, delayed rewards etc.
+    The work is discussed in more details further.
+
+\subsection{Motivation}
+% - What are the motivation and problem? Give some background.
+	In RL setup numerous results in the past have proven
+    that for low-dimensional feature representations and linear function
+    approximators Temporal Difference learning outperforms 
+    Monte Carlo estimation. However, in deep RL the spectrum of problems  
+    has been broadened by using deep network architectures for function
+    approximation. This allowed to handle high dimensionality inputs,
+    extremely large state space and more sophisticated environments with partial 
+    observability, still TD serves as the basis for
+    most of developed algorithms. One of the problems in deep RL is that
+    the choice of algorithm for given task is based on empirical results.
+    
+    % change citation
+    \citet{DBLP:journals/corr/DosovitskiyK16} successfully developed a Monte Carlo
+    prediction based approach (Direct Future Prediction) which outscored TD, 
+    albeit the algorithm involved the use of specific concepts and
+    components. The achieved results
+    could induce the aspiration to study the existing solutions on standard
+    problems within the framework of comparable experiments and motivate
+    to explore the ways to combine advantages of existing approaches in deep RL.
+    
+\subsection{Proposed approach}
+% - How do they propose to solve it?
+\color{red}
+	The more complicated model architectures become with developing
+    new solutions, the more serious becomes the issue of defining causes 
+    for perplexing performance
+    or the correctness of results. 
+    To surpass potential mistakes in conclusion for an analysis of algorithms,
+    the authors try to separate the factors which could influence
+    the performance:
+    \begin{enumerate}
+    \item complexity of the environment  \\
+    Experiments on 1D to 3D environments
+    \item algorithm configurations \\
+    Consider three essential aspects: 
+    \begin{itemize}
+      \item TD or MC (infinite) varying rollout length in the
+      update, -> n-step Q learning
+      \item infinite vs finite horizon -> Q\_MC
+      \item pure based vs A3C not to be limited in conclusions -> A3C from Mnih
+    \end{itemize}
+    \item environment properties \\
+    consider different factoring by criterias: sparse, delayed rewards, terminal
+    state, reward type, perceptual complexity
+    \end{enumerate}
+    
+    + additional help/observations in terms of health gathering<...> problems
+
+\color{black}
+	
+
+\section{Experiments}
+% Discuss the experiments conducted in the paper. A good way to go about doing this is to think about what the advantages of the model are, and what might be a good way to demonstrate that before looking at what was attempted by the authors.
+
+% - What are the authors trying to demonstrate with the experiments?
+ 
+ \textcolor{red}{describe controlled experiments, VizDoom environments, perception}
+
+% - Are there experiments that might demonstrate weaknesses/strengths that should be there but aren’t?
+% - Are there any flaws in the experiments they run? What are they?
+% \textcolor{red}{paper review comments}
+% 	https://openreview.net/forum?id=HyiAuyb0b
+
+\subsection{Motivation for the experiments}
+\subsection{Reproducing the main results}
+% Reproducing the results. Apart from the experimental details included in the paper, you should also include details that were not included.
+% - What are some of the hyperparameters that were excluded from the paper? How important were they to get things working?
+% - Are there technical details (missing or wrong equations, etc.) that were missing from the paper? If yes, what were they and what did you do to fill in the gap. Justify your choices.
+
+
+\begin{table}
+\centering
+\label{table1}
+\begin{tabular}{@{}l|c|cc}
+\toprule
+                                             & \#steps & Seaquest       & Pong \\ \midrule
+    A3C (Mnih et al., 2016)                  & 80M     & 2300           & 11.4 \\ \midrule
+	$Q_{MC}$ (Amiranashvili et al., 2017)    & 60M     & \textbf{12708} & -4.2 \\
+	20-step $Q$ (Amiranashvili et al., 2017) & 60M     & 4276           & 8.9  \\
+	20-step A3C (Amiranashvili et al., 2017) & 60M     & 2021           & 20.6 \\ \midrule
+    20-step $Q$                              & 5M      &                &                 \\  
+    20-step A3C                              & 5M      &                & \textbf{21}     \\ \bottomrule
+\end{tabular}
+\caption{Calibration against published results on standard environments.}
+\end{table}
+
+\section{Discussion}
+% - How is the experiment aligned with proposed approach/analysis
+% - Criticism of missing information, unmentioned drawbacks (if any)
+
+
+\citet{mnih2015} \\
+OpenAI's Gym \citep{gym} \\
+\citep{pytorch} \\
+\citet{amiranashvili2018analyzing} \\
+\citet{pmlr-v48-mniha16}
+
+\pagebreak
+
+\small
+
+\bibliography{report}
+
+\end{document}
+
+
+
