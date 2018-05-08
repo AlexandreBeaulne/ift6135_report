@@ -40,57 +40,91 @@
 \maketitle
 \section{Introduction}
 
-The objective of our project was to reproduce and compare results
-using different Deep Reinforcement Learning algorithms considered
-by \citet{amiranashvili2018analyzing}. Since a huge amount of work is
-done by the authors, we decided to focus on Atari
-video games.
-
-The choice of the paper for the course project is explained
-by the wide range of applicability of Deep Learning
-including the use of deep neural networks architectures
-to solve more challenging problems as in deep RL
-being at the junction between two machine learning approaches.
+Our project has for objective to reproduce a subset of results
+the results from TD or Not TD: Analyzing the Role of Temporal
+Differencing in Deep Reinforcement Learning \citep{amiranashvili2018analyzing}.
+In recent years, techniques combining Reinforcement Learning (RL)
+and Deep Learning (DL) have emerged \citep{mnih2015} to produce
+superhuman performance at some control tasks. However, the behavior
+of deep neural architectures when used as function approximators
+in RL is still poorly understood. The chosen paper aims to improve
+this understanding.
 
 \subsection*{Background}
-	The key idea of Reinforcement Learning (RL) is the learning
-    from interaction with an environment through observations,
-    actions and rewards. \\
-    Consider standard RL problem over discrete time steps
-    involving an episodic setup (starting an episode at $t=0$ and finishing it at
-    terminal time step $t=T$).
-    Let an agent be in a stochastic environment
-    with its current state $s_t$ at time step $t$.
-    The agent can perform
-    an action $a_t$ from a discrete set of actions.
-    This action leads the environment to a new state $s_{t + 1}$,
-    and gives a reward $r_t$ to the agent or can finish the episode. \\
-    The goal of the agent is to learn a policy $\pi(a_t|s_t)$
-    to obtain the maximum expected return over time which is
-    the total amount
-    of reward that it can get from the current time step
-    to the end of the episode,
-    with future rewards being reduced by discount factor $\gamma$
-    for each time step. \\
-    For a given policy $\pi$ the value function and the action-value function
-    are defined as:
-	\begin{eqnarray*}
-    	V^\pi(s_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t], &
-        Q^\pi(s_t, a_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t, a_t]
-	\end{eqnarray*}
-    where $\hat{R}_t$ is cumulated discounted reward
-    $R^\gamma_t = \sum_{i=t}^T \gamma^{i-t} r_i$ \\
-    or a truncated sum $R^\tau_t = \sum_{i=t}^{t+\tau} r_i$
-    ($\tau$ in this case is fixed number of steps - horizon)
-    \\
-    Corresponding optimal functions are
+
+RL is an area of machine learning concerned with how software agents
+ought to take actions in an environment so as to maximize some notion
+of cumulative reward \citep{suttonbarto2018}. In the traditional RL
+framework, an agent's evolution is \emph{entirely} defined by a sequence
+of state, action and reward tuples. This sequence forms a
+partially observable markov decision process (POMDP). The objective
+of the agent is to pick the action in any state that will
+maximize the cumulative rewards encountered till the end of the
+sequence (the \emph{episode}).\\
+
+More rigourously, a standard RL problem develops over discrete
+time steps involving an episodic setup (starting an episode at
+$t=0$ and finishing it at terminal time step $t=T$).
+The agent evolves in a stochastic environment with its current state
+$s_t$ at time step $t$, and can can perform an action $a_t$ from a
+set of actions. This action leads the environment to a new state
+$s_{t + 1}$, and gives a reward $r_t$ to the agent or finishes the episode.
+The goal of the agent is to learn a policy $\pi(a_t|s_t)$
+to obtain the maximum expected return over time which is
+the total amount of reward that it can get from the current time step
+to the end of the episode, with future rewards being reduced by discount
+factor $\gamma$ for each time step. \\
+
+For a given policy $\pi$ the value function and the action-value function
+are defined as:
     \begin{eqnarray*}
-    	V^*(s_t) \defeq \max_{\pi}V^\pi(s_t), &
-        Q^*(s_t, a_t) \defeq \max_{\pi} Q^\pi(s_t, a_t)
-	\end{eqnarray*}
-    \textcolor{red}{short TD MC theory, Q-learning, mention DQN ??}
+    V^\pi(s_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t], &
+    Q^\pi(s_t, a_t) \defeq \mathbb{E}_{\pi} [\hat{R}_t | s_t, a_t]
+    \end{eqnarray*}
+where $\hat{R}_t$ is cumulated discounted reward
+
+\begin{equation}
+R^\gamma_t = \sum_{i=t}^T \gamma^{i-t} r_i
+\end{equation}
+
+or a truncated sum
+
+\begin{equation}
+R^\tau_t = \sum_{i=t}^{t+\tau} r_i
+\end{equation}
+
+$\tau$ in this case is a fixed number of steps; the \emph{horizon}.
+
+The optimal state and state-action value functions are respectively given by
+
+\begin{eqnarray} \label{optimal}
+    V^*(s_t) \defeq \max_{\pi}V^\pi(s_t), &
+    Q^*(s_t, a_t) \defeq \max_{\pi} Q^\pi(s_t, a_t)
+\end{eqnarray}
+
+Value based algorithms to find the optimal policy require computing
+or approximating one of the value function from equation (\ref{optimal}).
 
 \section{Paper Summary}
+RL algorithms to find optimal policies involve exploring trajectories
+and backtracking observed rewards to previous visited state-action pairs.
+The depth and breath of the search vary between different algorithms
+(Figure (\ref{backups})).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{backups}
+    \caption{Different backtracking schemes \citet{suttonbarto2018}}
+    \label{backups}
+\end{figure}
+
+The large size of the state space of the problems considered preclude full breadth
+search, which leaves sampling as the only viable exploration scheme. Sampling
+search can be divided into two approaches, depending on the depth of the trajectory
+sampled. Monte Carlo search samples a trajectory till the end, while temporal
+differencing samples a single step, and approximate the value of the rest of the
+trajectory with the current value function at the next state (i.e. \emph{bootstrap}).
+
 % Give a summary of the work, in your own words
 The authors want to investigate the role of Temporal Differencing (TD)
 in modern deep Reinforcement Learning and observe the use of
@@ -187,7 +221,7 @@ state, reward type, perceptual complexity
     $Q_{MC}$ (Amiranashvili et al., 2017)    & 60M         & 12708          & -4.2            \\
     20-step $Q$ (Amiranashvili et al., 2017) & 60M         & 4276           & 8.9             \\
     20-step A3C (Amiranashvili et al., 2017) & 60M         & 2021           & 20.6            \\ \midrule
-    20-step $Q$ (our results)                & 20M         & 0              & 21              \\
+    20-step $Q$ (our results)                & 20M         & 100            & 21              \\
     20-step A3C (our results)                & 20M         & 2702           & 21              \\ \bottomrule
     \end{tabular}
 \caption{Our results at two Atari games against selected publications. Higher scores are better for both games.}
