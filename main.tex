@@ -121,9 +121,25 @@ The depth and breath of the search vary between different algorithms
 The large size of the state space of the problems considered preclude full breadth
 search, which leaves sampling as the only viable exploration scheme. Sampling
 search can be divided into two approaches, depending on the depth of the trajectory
-sampled. Monte Carlo search samples a trajectory till the end, while temporal
-differencing samples a single step, and approximate the value of the rest of the
+sampled. Monte Carlo (MC) search samples a trajectory till the end, while temporal
+differencing (TD) samples a single step, and approximate the value of the rest of the
 trajectory with the current value function at the next state (i.e. \emph{bootstrap}).
+Naturally, the complete spectrum of hybrid exploration depths, i.e. rollout length,
+from 1 step (TD) to the end of the episode (MC) is possible.
+Before the advent of deep network as function approximators, it has been empirically
+demonstrated that TD is superior to MC \citep{sutton1995}. However, it is unclear
+whether those results still hold with the use of deep neural nets as function approximators.
+This question is explored in \citep{amiranashvili2018analyzing}. \\
+
+The authors two sets of experiments. In one set, they benchmark three different algorithms
+(A3C, n-step Q-learning and $Q_MC$) on games from the Atari and VizDoom environments,
+varying rollout lengths. The second set of experiments are \emph{controlled}, fixed algorithms
+were tested against environments whose reward randomness, delay and sparsity were
+carefully adjusted.\\
+
+
+
+\pagebreak
 
 % Give a summary of the work, in your own words
 The authors want to investigate the role of Temporal Differencing (TD)
