@@ -26,7 +26,7 @@ def plot_graph(save=False):
     index = 0
     plt.figure()
     for i in range(len(games_un)):
-        plt.subplot(num_games, 1, i + 1)
+        plt.subplot(1, num_games, i + 1)
         game = games_un[i]
         print(game)
         for j in range(len(algos_un)):
@@ -52,4 +52,4 @@ def plot_graph(save=False):
 
 
 if __name__ == '__main__':
-    plot_graph()
+    plot_graph(True)
