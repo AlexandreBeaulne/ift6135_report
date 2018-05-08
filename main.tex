@@ -40,7 +40,7 @@
 \maketitle
 \section{Introduction}
 
-Our project has for objective to reproduce a subset of
+Our project has for objective to reproduce a subset of results
 the results from TD or Not TD: Analyzing the Role of Temporal
 Differencing in Deep Reinforcement Learning \citep{amiranashvili2018analyzing}.
 In recent years, techniques combining Reinforcement Learning (RL)
@@ -57,12 +57,12 @@ ought to take actions in an environment so as to maximize some notion
 of cumulative reward \citep{suttonbarto2018}. In the traditional RL
 framework, an agent's evolution is \emph{entirely} defined by a sequence
 of state, action and reward tuples. This sequence forms a
-partially observable Markov decision process (POMDP). The objective
+partially observable markov decision process (POMDP). The objective
 of the agent is to pick the action in any state that will
 maximize the cumulative rewards encountered till the end of the
 sequence (the \emph{episode}).\\
 
-More rigorously, a standard RL problem develops over discrete
+More rigourously, a standard RL problem develops over discrete
 time steps involving an episodic setup (starting an episode at
 $t=0$ and finishing it at terminal time step $t=T$).
 The agent evolves in a stochastic environment with its current state
@@ -132,7 +132,7 @@ whether those results still hold with the use of deep neural nets as function ap
 This question is explored in \citep{amiranashvili2018analyzing}. \\
 
 The authors perform two sets of experiments. In one set, they benchmark three different
-algorithms (A3C, n-step Q-learning and $Q_{MC}$) on games from the Atari and VizDoom environments,
+algorithms (A3C, n-step Q-learning and $Q_MC$) on games from the Atari and VizDoom environments,
 varying rollout lengths. The second set of experiments are \emph{controlled}, fixed algorithms
 were tested against environments whose reward randomness, delay and sparsity were
 carefully adjusted.\\
@@ -141,6 +141,23 @@ They conclude that MC estimation is a feasible and sometimes even competitive al
 to TD. MC performs particularly well in visually complex 3D environments
 and with delayed or sparse rewards. As for rollout, the authors obtain the
 best results with a rollout length of 20.
+
+\section{Experiments \& Discussion}
+
+Considering the large computational resources necessary to train deep reinforcement models,
+we set out to reproduce a subset of the original paper, namely running two out of the three
+algorithms (n-step Q-learning and A3C) on two Atari games (Pong and Seaquest),
+also measuring the impact of different rollout lengths. We were not able to reproduce
+the $Q_{MC}$ algorithm. While pseudocode for n-step Q-learning and A3C is available in
+\cite{pmlr-v48-mniha16}, \cite{amiranashvili2018analyzing} did not provide pseudocode
+for $Q_{MC}$, their explaination were insufficient for us to be able to implement the
+algorithm, and source code was not shared by the authors yet. \\
+
+Table (\ref{table1}) shows average scores achieved by our implementations. Our
+implementation of n-step Q-learning did not achieve performance better than random
+on the game Seaquest. Our implemention of n-step Q-learning performed better than
+the original article's for the game of Pong, and our implementation of A3C performed
+better that the original article's for both the game of Pong and the game of Seaquest.
 
 \begin{table}[H]
 \centering
@@ -152,11 +169,15 @@ best results with a rollout length of 20.
     $Q_{MC}$ (Amiranashvili et al., 2017)    & 60M      & 12708     & -4.2  \\
     20-step $Q$ (Amiranashvili et al., 2017) & 60M      & 4276      & 8.9   \\
     20-step A3C (Amiranashvili et al., 2017) & 60M      & 2021      & 20.6  \\ \midrule
-    20-step $Q$ (our results)                & 20M      & 100       & 21    \\
-    20-step A3C (our results)                & 20M      & 2702      & 21    \\ \bottomrule
+    20-step $Q$ (our results)                & 20M      & 100       & 21.0  \\
+    20-step A3C (our results)                & 20M      & 2702      & 21.0  \\ \bottomrule
     \end{tabular}
 \caption{Our results at two Atari games against selected publications. Higher scores are better for both games.}
 \end{table}
+
+Figure (\ref{rollouts}) shows the impact on score of different rollout lengths.
+Our results align with \cite{amiranashvili2018analyzing}, with $n=20$ being
+the optimal rollout length.
 
 \begin{figure}[H]
     \centering
@@ -166,83 +187,8 @@ best results with a rollout length of 20.
     \label{rollouts}
 \end{figure}
 
-
-\pagebreak
-
-
-\subsection{Motivation}
-% - What are the motivation and problem? Give some background.
-In RL setup numerous results in the past have proven
-that for low-dimensional feature representations and linear function
-approximators Temporal Difference learning outperforms
-Monte Carlo estimation. However, in deep RL the spectrum of problems
-has been broadened by using deep network architectures for function
-approximation. This allowed to handle high dimensionality inputs,
-extremely large state space and more sophisticated environments with partial
-observability, still TD serves as the basis for
-most of developed algorithms. One of the problems in deep RL is that
-the choice of algorithm for given task is based on empirical results.
-
-\subsection{Proposed approach}
-% - How do they propose to solve it?
-\color{red}
-The more complicated model architectures become with developing
-new solutions, the more serious becomes the issue of defining causes
-for perplexing performance
-or the correctness of results.
-To surpass potential mistakes in conclusion for an analysis of algorithms,
-the authors try to separate the factors which could influence
-the performance:
-\begin{enumerate}
-\item complexity of the environment  \\
-Experiments on 1D to 3D environments
-\item algorithm configurations \\
-Consider three essential aspects:
-\begin{itemize}
-  \item TD or MC (infinite) varying rollout length in the
-  update, -> n-step Q learning
-  \item infinite vs finite horizon -> Q\_MC
-  \item pure based vs A3C not to be limited in conclusions -> A3C from Mnih
-\end{itemize}
-\item environment properties \\
-consider different factoring by criterias: sparse, delayed rewards, terminal
-state, reward type, perceptual complexity
-\end{enumerate}
-
-+ additional help/observations in terms of health gathering<...> problems
-
-\color{black}
-
-\section{Experiments}
-% Discuss the experiments conducted in the paper. A good way to go about doing this is to think about what the advantages of the model are, and what might be a good way to demonstrate that before looking at what was attempted by the authors.
-
-% - What are the authors trying to demonstrate with the experiments?
-
- \textcolor{red}{describe controlled experiments, VizDoom environments, perception}
-
-% - Are there experiments that might demonstrate weaknesses/strengths that should be there but aren’t?
-% - Are there any flaws in the experiments they run? What are they?
-% \textcolor{red}{paper review comments}
-% 	https://openreview.net/forum?id=HyiAuyb0b
-
-\subsection{Motivation for the experiments}
-\subsection{Reproducing the main results}
-% Reproducing the results. Apart from the experimental details included in the paper, you should also include details that were not included.
-% - What are some of the hyperparameters that were excluded from the paper? How important were they to get things working?
-% - Are there technical details (missing or wrong equations, etc.) that were missing from the paper? If yes, what were they and what did you do to fill in the gap. Justify your choices.
-
-
-
-\section{Discussion}
-% - How is the experiment aligned with proposed approach/analysis
-% - Criticism of missing information, unmentioned drawbacks (if any)
-
-
-\citet{mnih2015} \\
-OpenAI's Gym \citep{gym} \\
-\citep{pytorch} \\
-\citet{amiranashvili2018analyzing} \\
-\citet{pmlr-v48-mniha16}
+Animations showing the different algorithm in action before and after training
+are available at \url{http://cs.mcgill.ca/~abeaul10/rl_prez/animations.html}.
 
 \pagebreak
 
