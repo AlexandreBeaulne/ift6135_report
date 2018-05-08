@@ -30,7 +30,6 @@ def plot_graph():
     plt.xlabel('rollout')
     plt.ylabel('score')
     plt.title('Seaquest')
-    plt.legend()
 
     plt.tight_layout()
     plt.savefig('results.png')
