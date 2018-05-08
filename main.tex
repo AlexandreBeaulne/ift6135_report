@@ -131,11 +131,27 @@ demonstrated that TD is superior to MC \citep{sutton1995}. However, it is unclea
 whether those results still hold with the use of deep neural nets as function approximators.
 This question is explored in \citep{amiranashvili2018analyzing}. \\
 
-The authors two sets of experiments. In one set, they benchmark three different algorithms
-(A3C, n-step Q-learning and $Q_MC$) on games from the Atari and VizDoom environments,
+The authors perform two sets of experiments. In one set, they benchmark three different
+algorithms (A3C, n-step Q-learning and $Q_MC$) on games from the Atari and VizDoom environments,
 varying rollout lengths. The second set of experiments are \emph{controlled}, fixed algorithms
 were tested against environments whose reward randomness, delay and sparsity were
 carefully adjusted.\\
+
+\begin{table}[H]
+\centering
+\label{table1}
+    \begin{tabular}{@{}l|c|cc}
+    \toprule
+                                             & \#steps  & Seaquest  & Pong  \\ \midrule
+    20-step A3C (Mnih et al., 2016)          & 80M      & 2300      & 11.4  \\ \midrule
+    $Q_{MC}$ (Amiranashvili et al., 2017)    & 60M      & 12708     & -4.2  \\
+    20-step $Q$ (Amiranashvili et al., 2017) & 60M      & 4276      & 8.9   \\
+    20-step A3C (Amiranashvili et al., 2017) & 60M      & 2021      & 20.6  \\ \midrule
+    20-step $Q$ (our results)                & 20M      & 100       & 21    \\
+    20-step A3C (our results)                & 20M      & 2702      & 21    \\ \bottomrule
+    \end{tabular}
+\caption{Our results at two Atari games against selected publications. Higher scores are better for both games.}
+\end{table}
 
 \begin{figure}[H]
     \centering
@@ -234,21 +250,6 @@ state, reward type, perceptual complexity
 % - Are there technical details (missing or wrong equations, etc.) that were missing from the paper? If yes, what were they and what did you do to fill in the gap. Justify your choices.
 
 
-\begin{table}
-\centering
-\label{table1}
-    \begin{tabular}{@{}l|c|cc}
-    \toprule
-                                             & \#steps     & Seaquest       & Pong            \\ \midrule
-    20-step A3C (Mnih et al., 2016)          & 80M         & 2300           & 11.4            \\ \midrule
-    $Q_{MC}$ (Amiranashvili et al., 2017)    & 60M         & 12708          & -4.2            \\
-    20-step $Q$ (Amiranashvili et al., 2017) & 60M         & 4276           & 8.9             \\
-    20-step A3C (Amiranashvili et al., 2017) & 60M         & 2021           & 20.6            \\ \midrule
-    20-step $Q$ (our results)                & 20M         & 100            & 21              \\
-    20-step A3C (our results)                & 20M         & 2702           & 21              \\ \bottomrule
-    \end{tabular}
-\caption{Our results at two Atari games against selected publications. Higher scores are better for both games.}
-\end{table}
 
 \section{Discussion}
 % - How is the experiment aligned with proposed approach/analysis
