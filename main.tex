@@ -40,7 +40,7 @@
 \maketitle
 \section{Introduction}
 
-Our project has for objective to reproduce a subset of results
+Our project has for objective to reproduce a subset of
 the results from TD or Not TD: Analyzing the Role of Temporal
 Differencing in Deep Reinforcement Learning \citep{amiranashvili2018analyzing}.
 In recent years, techniques combining Reinforcement Learning (RL)
@@ -57,12 +57,12 @@ ought to take actions in an environment so as to maximize some notion
 of cumulative reward \citep{suttonbarto2018}. In the traditional RL
 framework, an agent's evolution is \emph{entirely} defined by a sequence
 of state, action and reward tuples. This sequence forms a
-partially observable markov decision process (POMDP). The objective
+partially observable Markov decision process (POMDP). The objective
 of the agent is to pick the action in any state that will
 maximize the cumulative rewards encountered till the end of the
 sequence (the \emph{episode}).\\
 
-More rigourously, a standard RL problem develops over discrete
+More rigorously, a standard RL problem develops over discrete
 time steps involving an episodic setup (starting an episode at
 $t=0$ and finishing it at terminal time step $t=T$).
 The agent evolves in a stochastic environment with its current state
@@ -132,7 +132,7 @@ whether those results still hold with the use of deep neural nets as function ap
 This question is explored in \citep{amiranashvili2018analyzing}. \\
 
 The authors perform two sets of experiments. In one set, they benchmark three different
-algorithms (A3C, n-step Q-learning and $Q_MC$) on games from the Atari and VizDoom environments,
+algorithms (A3C, n-step Q-learning and $Q_{MC}$) on games from the Atari and VizDoom environments,
 varying rollout lengths. The second set of experiments are \emph{controlled}, fixed algorithms
 were tested against environments whose reward randomness, delay and sparsity were
 carefully adjusted.\\
