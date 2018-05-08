@@ -137,6 +137,11 @@ varying rollout lengths. The second set of experiments are \emph{controlled}, fi
 were tested against environments whose reward randomness, delay and sparsity were
 carefully adjusted.\\
 
+They conclude that MC estimation is a feasible and sometimes even competitive alternative
+to TD. MC performs particularly well in visually complex 3D environments
+and with delayed or sparse rewards. As for rollout, the authors obtain the
+best results with a rollout length of 20.
+
 \begin{table}[H]
 \centering
 \label{table1}
@@ -164,20 +169,6 @@ carefully adjusted.\\
 
 \pagebreak
 
-% Give a summary of the work, in your own words
-The authors want to investigate the role of Temporal Differencing (TD)
-in modern deep Reinforcement Learning and observe the use of
-different techniques in controlled comparable experiments to evaluate the
-advantages of using one approach versus another.
-They reproduce classic results as well as use
-complex (3D) environments to test for tasks requiring perception,
-navigation and control, while separating influencing factors.
-They discover that Monte Carlo estimation
-(MC) can be feasible alternative and can be even competitive to TD,
-in some cases better
-in perception and control of visually complex 3D environments
-dealing with reward sparsity, delayed rewards etc.
-The work is discussed in more details further.
 
 \subsection{Motivation}
 % - What are the motivation and problem? Give some background.
@@ -191,15 +182,6 @@ extremely large state space and more sophisticated environments with partial
 observability, still TD serves as the basis for
 most of developed algorithms. One of the problems in deep RL is that
 the choice of algorithm for given task is based on empirical results.
-
-% change citation
-\citet{DBLP:journals/corr/DosovitskiyK16} successfully developed a Monte Carlo
-prediction based approach (Direct Future Prediction) which outscored TD,
-albeit the algorithm involved the use of specific concepts and
-components. The achieved results
-could induce the aspiration to study the existing solutions on standard
-problems within the framework of comparable experiments and motivate
-to explore the ways to combine advantages of existing approaches in deep RL.
 
 \subsection{Proposed approach}
 % - How do they propose to solve it?
