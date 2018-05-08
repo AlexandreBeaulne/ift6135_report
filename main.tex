@@ -190,6 +190,33 @@ the optimal rollout length.
 Animations showing the different algorithm in action before and after training
 are available at \url{http://cs.mcgill.ca/~abeaul10/rl_prez/animations.html}.
 
+\subsection*{Model architecture details}
+It is important to mention that for the implementation of deep nonlinear function 
+approximators in the original work the authors used the same network architecture 
+as for design of DQN by \citet{mnih2015}.
+For learning from a raw image input (preprocessed stacked frames) the model 
+consisting of 3 convolutional layers followed by a fully connected layer was giving
+as an output the corresponding predicted Q-values for each valid action.
+
+To try to improve the results we slightly modified this setting inspired by successful implementation
+of Deep Recurrent Q-network (DRQN) by \citet{DBLP:journals/corr/HausknechtS15} for POMDP. The key idea
+of this improvement is to liquidate the limitation of DQN which is based on 4 recent past states. 
+As the solution for the necessity to have a memory for longer than 4 recent frames, 
+a fully connected layer was replaced by a recurrent LSTM layer of the same size. 
+This only difference resulted in better performance of the model to handle
+the loss of information. In our implementation we used 4 convolution layers
+with kernel 3x3, stride 2 and padding 1, followed by an LSTM layer.  
+
+Figure (\ref{dnn}) might help to visually see the contrast between the architectures. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 7.5cm,height = 6cm]{dqn}
+	\includegraphics[width = 6cm]{drqn}
+	\caption{Deep network architectures. Left: DQN. Right: DRQN 
+	\label{dnn}
+\end{figure}
+
+
 \pagebreak
 
 \small
